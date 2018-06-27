@@ -9,7 +9,7 @@ A theme for oh-my-zsh, extends the bira theme (part of the default themes) with 
 
 ## Screenshot
 
-[Screenshot of the colorbira theme](https://i.imgur.com/EHMeJI4.png)
+![Screenshot of the colorbira theme](https://i.imgur.com/EHMeJI4.png)
 
 ## Per-host prompt color definitions
 
