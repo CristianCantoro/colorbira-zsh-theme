@@ -32,3 +32,22 @@ So the following variables can be defined:
 
 The colors are defined in this order `<user>`, `<at>`, `<host>` so if a color is not defined the precedent is used.
 No color equals to white.
+
+### Example
+
+If your host is named `myhost` setting `hosts.themes` like this:
+```bash
+host="$(hostname |  cut -d'.' -f1)"
+case "$host" in
+  'myhost')
+      local user_color_root="${fg[red]}"
+
+      local user_color_user="${fg[green]}"
+      local at_color_user="${fg[magenta]}"
+      local host_color_user="${fg[yellow]}"
+      ;;
+ esac
+```
+
+You get:
+![Screenshot of the colorbira theme with green, magenta and yellow prompt](https://i.imgur.com/oV3sbL4.png)
