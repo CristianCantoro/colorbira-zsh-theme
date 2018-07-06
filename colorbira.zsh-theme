@@ -38,18 +38,57 @@ function _theme() {
   #  - clean: ‹branch ✓›
   #  - dirty: ‹branch ✗›
   # else empty.
+  local git_green="${FG[113]}"
+
+  # shellcheck disable=SC2034
+  {
+  ZSH_THEME_GIT_PROMPT_PREFIX=" $git_green‹"
+  ZSH_THEME_GIT_PROMPT_SUFFIX="$git_green›$reset_color"
+  }
+
   function _gitp() {
     unset -f _gitp
 
-    local git_green="${FG[113]}"
+    local gitconf
+    gitconf="$(command git config --get oh-my-zsh.hide-dirty 2>/dev/null)"
 
     # shellcheck disable=SC2034
     {
-    ZSH_THEME_GIT_PROMPT_DIRTY=" ${fg[red]}✗"
-    ZSH_THEME_GIT_PROMPT_CLEAN=" ${FX[bold]}✓$reset_color"
-    ZSH_THEME_GIT_PROMPT_PREFIX=" $git_green‹"
-    ZSH_THEME_GIT_PROMPT_SUFFIX="$git_green›$reset_color"
+    if [[ "$gitconf" != "1" ]]; then
+      ZSH_THEME_GIT_PROMPT_DIRTY=" ${fg[red]}✗"
+      ZSH_THEME_GIT_PROMPT_CLEAN=" ${FX[bold]}✓$reset_color"
+    fi
     }
+  }
+
+  function git_prompt_info () {
+    local ref
+
+    local gitconf
+    gitconf="$(command git config --get oh-my-zsh.hide-status 2>/dev/null)"
+
+    local _git_prompt_info
+
+    if [[ "$gitconf" != "1" ]]; then
+      ref=$(command git symbolic-ref HEAD 2> /dev/null) || \
+        ref=$(command git rev-parse --short HEAD 2> /dev/null) || \
+          return 0
+
+      gitconf="$(command git config --get oh-my-zsh.hide-dirty 2>/dev/null)"
+
+      if [[ "$gitconf" != "1" ]]; then
+        _git_prompt_info="$ZSH_THEME_GIT_PROMPT_PREFIX"
+        _git_prompt_info+="${ref#refs/heads/}"
+        _git_prompt_info+="$(parse_git_dirty)"
+        _git_prompt_info+="$ZSH_THEME_GIT_PROMPT_SUFFIX"
+      else
+        _git_prompt_info="$ZSH_THEME_GIT_PROMPT_PREFIX"
+        _git_prompt_info+="${ref#refs/heads/}"
+        _git_prompt_info+="$ZSH_THEME_GIT_PROMPT_SUFFIX"
+      fi
+
+      echo "${_git_prompt_info}"
+    fi
   }
   local gitp=''
   _gitp
@@ -128,6 +167,7 @@ function _theme() {
 
     unset -f _venvp
     unset -f _rvmp
+    unset _gitp
   }
 
   _cleanup
