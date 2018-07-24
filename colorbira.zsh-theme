@@ -7,30 +7,32 @@ function _theme() {
   # import per-host prompt color definitions
   source "$ZSH_CUSTOM/themes/hosts.themes"
 
-  local c
-  local a
-  local h
+  local cc
+  local aa
+  local hh
 
   local user_symbol
 
   if [[ $UID -eq 0 ]]; then
     # user is root
-    c="${user_color_root}"
-    a="${at_color_root}"
-    h="${host_color_root}"
+    cc="${user_color_root}"
+    aa="${at_color_root}"
+    hh="${host_color_root}"
 
     user_symbol='#'
   else
     # user is not root
-    c="${user_color_user}"
-    a="${at_color_user}"
-    h="${host_color_user}"
+    cc="${user_color_user}"
+    aa="${at_color_user}"
+    hh="${host_color_user}"
 
     user_symbol='$'
   fi
 
   # user@host cwd
-  local user_host='%{$terminfo[bold]%}'$c'%n'$a'@'$h'%m$reset_color%}'
+  local user_host='%{$terminfo[bold]%}'${cc}'%n%{$reset_color%}'
+        user_host+='%{$terminfo[bold]%}'${aa}'@%{$reset_color%}'
+        user_host+='%{$terminfo[bold]%}'${hh}'%m%{$reset_color%}'
   local current_dir='%{$terminfo[bold]${fg[blue]}%}%~%{$reset_color%}'
 
   # git
