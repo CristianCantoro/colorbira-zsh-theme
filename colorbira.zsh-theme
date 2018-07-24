@@ -19,12 +19,28 @@ function _theme() {
     aa="${at_color_root}"
     hh="${host_color_root}"
 
+    if [ -z "$at_color_root" ]; then
+      aa="$cc"
+    fi
+
+    if [ -z "$host_color_root" ]; then
+      hh="$aa"
+    fi
+
     user_symbol='#'
   else
     # user is not root
     cc="${user_color_user}"
     aa="${at_color_user}"
     hh="${host_color_user}"
+
+    if [ -z "$at_color_user" ]; then
+      aa="$cc"
+    fi
+
+    if [ -z "$host_color_user" ]; then
+      hh="$aa"
+    fi
 
     user_symbol='$'
   fi
