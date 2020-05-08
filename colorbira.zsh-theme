@@ -131,7 +131,7 @@ function _theme() {
     unset -f _condap
     local condap=''
 
-    condap+='%{$fg[cyan]'
+    condap+='%{$FG[014]'
     condap+='$(test "$CONDA_DEFAULT_ENV" && echo " ‹$CONDA_DEFAULT_ENV›")'
     condap+='$reset_color%}'
 
