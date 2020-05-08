@@ -125,6 +125,19 @@ function _theme() {
     echo "$venvp"
   }
 
+  # conda
+  # if conda is active: ‹conda›. else empty.
+  function _condap() {
+    unset -f _condap
+    local condap=''
+
+    condap+='%{$fg[cyan]'
+    condap+='$(test "$CONDA_DEFAULT_ENV" && echo " ‹$CONDA_DEFAULT_ENV›")'
+    condap+='$reset_color%}'
+
+    echo "$condap"
+  }
+
   # helper functions for ruby prompt
   function rvm_prompt_active() {
     return 1
@@ -171,7 +184,7 @@ function _theme() {
   }
 
   # prompt: user@host cwd ‹virtualenv› ‹ruby› ‹git›
-  PROMPT="╭─${user_host} ${current_dir}$(_venvp)$(_rvmp)${gitp}"
+  PROMPT="╭─${user_host} ${current_dir}$(_venvp)$(_condap)$(_rvmp)${gitp}"
   PROMPT+="
 ╰─%B${user_symbol}%b "
 
