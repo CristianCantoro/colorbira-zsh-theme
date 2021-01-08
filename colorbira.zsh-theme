@@ -7,6 +7,10 @@ function _theme() {
   # import per-host prompt color definitions
   source "$ZSH_CUSTOM/themes/hosts.themes"
 
+  # disable default virtualenv prompt
+  export VIRTUAL_ENV_DISABLE_PROMPT=1
+  export PYENV_VIRTUALENV_DISABLE_PROMPT=1
+
   local cc
   local aa
   local hh
@@ -119,7 +123,9 @@ function _theme() {
     local venvp=''
 
     venvp+='%{$fg[yellow]'
-    venvp+='$(virtualenv_prompt_info | sed -r "s#\[(.*)\]# ‹\1›#")'
+    venvp+='$(test "$VIRTUALENV_DISABLE_COLORBIRA_PROMPT" || \
+              (test "$VIRTUAL_ENV" && \
+               echo " ‹${VIRTUAL_ENV:+${VIRTUAL_ENV##*/}}›"))'
     venvp+='$reset_color%}'
 
     echo "$venvp"
