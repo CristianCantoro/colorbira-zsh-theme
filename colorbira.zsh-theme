@@ -80,7 +80,7 @@ function _theme() {
     source "$ZSH_CUSTOM/themes/colorbira.zsh-theme"
   }
 
-  if ${git_prompt_active:-false}; then
+  if ${git_prompt_active=true}; then
     function _gitp() {
       unset -f _gitp
 
@@ -132,7 +132,7 @@ function _theme() {
   }
   local gitp=''
   _gitp
-  if ${git_prompt_active:-false}; then
+  if ${git_prompt_active=true}; then
     gitp='%{$(git_prompt_info)$reset_color%}'
   else
     gitp=''
