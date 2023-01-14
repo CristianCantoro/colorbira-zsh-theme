@@ -68,20 +68,38 @@ function _theme() {
   ZSH_THEME_GIT_PROMPT_SUFFIX="$git_green›$reset_color"
   }
 
-  function _gitp() {
-    unset -f _gitp
+  function git_activate_prompt() {
+    git_prompt_active=true
 
-    local gitconf
-    gitconf="$(command git config --get oh-my-zsh.hide-dirty 2>/dev/null)"
-
-    # shellcheck disable=SC2034
-    {
-    if [[ "$gitconf" != "1" ]]; then
-      ZSH_THEME_GIT_PROMPT_DIRTY=" ${fg[red]}✗"
-      ZSH_THEME_GIT_PROMPT_CLEAN=" ${FX[bold]}✓$reset_color"
-    fi
-    }
+    source "$ZSH_CUSTOM/themes/colorbira.zsh-theme"
   }
+
+  function git_deactivate_prompt() {
+    git_prompt_active=false
+
+    source "$ZSH_CUSTOM/themes/colorbira.zsh-theme"
+  }
+
+  if ${git_prompt_active:-false}; then
+    function _gitp() {
+      unset -f _gitp
+
+      local gitconf
+      gitconf="$(command git config --get oh-my-zsh.hide-dirty 2>/dev/null)"
+
+      # shellcheck disable=SC2034
+      {
+      if [[ "$gitconf" != "1" ]]; then
+        ZSH_THEME_GIT_PROMPT_DIRTY=" ${fg[red]}✗"
+        ZSH_THEME_GIT_PROMPT_CLEAN=" ${FX[bold]}✓$reset_color"
+      fi
+      }
+    }
+  else
+    function _gitp() {
+      local gitconf
+    }
+  fi
 
   function git_prompt_info () {
     local ref
@@ -114,7 +132,11 @@ function _theme() {
   }
   local gitp=''
   _gitp
-  gitp='%{$(git_prompt_info)$reset_color%}'
+  if ${git_prompt_active:-false}; then
+    gitp='%{$(git_prompt_info)$reset_color%}'
+  else
+    gitp=''
+  fi
 
   # virtualenv
   # if virtualenv is active: ‹virtualenv›. else empty.
